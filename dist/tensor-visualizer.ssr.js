@@ -96,6 +96,10 @@ function _nonIterableRest() {
       type: Number,
       default: 4
     },
+    fillPercentage: {
+      type: Number,
+      default: 80
+    },
     showBoundingBox: {
       type: Boolean,
       default: false
@@ -109,7 +113,6 @@ function _nonIterableRest() {
         x: 0,
         y: 0
       },
-      maxFit: 80,
       minSize: null,
       localTensor: {
         shape: [],
@@ -124,9 +127,11 @@ function _nonIterableRest() {
     var totalSize = this.localTensor.shape.reduce(function (ts, e) {
       return e * ts;
     });
-    this.localTensor.data = new Array(totalSize).fill(0).map(function () {
-      return Math.random();
-    });
+
+    for (var i = this.localTensor.data.length; i < totalSize; i++) {
+      this.localTensor.data.push(Math.random());
+    }
+
     window.addEventListener('resize', this.setCanvasSize);
     this.initializeCanvas();
   },
@@ -193,7 +198,7 @@ function _nonIterableRest() {
       // based on the min-sidelength of the canvas
 
       var minCanvasSize = (_this$minSize = this.minSize) !== null && _this$minSize !== void 0 ? _this$minSize : 0;
-      var tensorDrawSize = minCanvasSize / 100 * this.maxFit;
+      var tensorDrawSize = minCanvasSize / 100 * this.fillPercentage;
       var zInducedSizeOffset = (tensorSizeZ - 1) / 2;
       var maxSize = Math.max(tensorSizeY + zInducedSizeOffset, tensorSizeX + zInducedSizeOffset);
       var elementSize = Math.floor(tensorDrawSize / maxSize); // calculate offset of the z-planes
@@ -425,7 +430,7 @@ var __vue_render__ = function __vue_render__() {
 
   return _c('div', {
     staticClass: "visualizer-wrapper"
-  }, [_vm._ssrNode("<canvas data-v-64893bde></canvas>")]);
+  }, [_vm._ssrNode("<canvas data-v-1f11d0b2></canvas>")]);
 };
 
 var __vue_staticRenderFns__ = [];
@@ -433,8 +438,8 @@ var __vue_staticRenderFns__ = [];
 
 var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-64893bde_0", {
-    source: ".visualizer-wrapper[data-v-64893bde]{width:100%;height:100%}.visualizer-wrapper canvas[data-v-64893bde]{width:100%;height:100%}",
+  inject("data-v-1f11d0b2_0", {
+    source: ".visualizer-wrapper[data-v-1f11d0b2]{width:100%;height:100%}.visualizer-wrapper canvas[data-v-1f11d0b2]{width:100%;height:100%}",
     map: undefined,
     media: undefined
   });
@@ -442,10 +447,10 @@ var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
 /* scoped */
 
 
-var __vue_scope_id__ = "data-v-64893bde";
+var __vue_scope_id__ = "data-v-1f11d0b2";
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-64893bde";
+var __vue_module_identifier__ = "data-v-1f11d0b2";
 /* functional template */
 
 var __vue_is_functional_template__ = false;

@@ -17,7 +17,6 @@ interface VisualizerData {
   ctx2D: CanvasRenderingContext2D | null | undefined;
   contextInitialized: boolean;
   canvasCenter: { x: number; y: number };
-  maxFit: number;
   minSize: number | null;
   localTensor: VisualizerTensor;
 }
@@ -48,6 +47,10 @@ export default /*#__PURE__*/Vue.extend({
       type: Number,
       default: 4,
     },
+    fillPercentage: {
+      type: Number,
+      default: 80,
+    },
     showBoundingBox: {
       type: Boolean,
       default: false,
@@ -58,7 +61,6 @@ export default /*#__PURE__*/Vue.extend({
       ctx2D: null,
       contextInitialized: false,
       canvasCenter: { x: 0, y: 0 },
-      maxFit: 80,
       minSize: null,
       localTensor: {
         shape: [],
@@ -72,7 +74,9 @@ export default /*#__PURE__*/Vue.extend({
 
     // generate test-data:
     const totalSize = this.localTensor.shape.reduce((ts, e) => e * ts);
-    this.localTensor.data = new Array(totalSize).fill(0).map(() => Math.random());
+    for(let i=this.localTensor.data.length; i<totalSize; i++){
+      this.localTensor.data.push(Math.random());
+    }
 
     window.addEventListener('resize', this.setCanvasSize);
 
@@ -133,7 +137,7 @@ export default /*#__PURE__*/Vue.extend({
       // calculate the size of the drawn tensor-plane
       // based on the min-sidelength of the canvas
       const minCanvasSize = this.minSize ?? 0;
-      const tensorDrawSize = (minCanvasSize / 100) * this.maxFit;
+      const tensorDrawSize = (minCanvasSize / 100) * this.fillPercentage;
 
       const zInducedSizeOffset = (tensorSizeZ - 1) / 2;
       const maxSize = Math.max(tensorSizeY + zInducedSizeOffset, tensorSizeX + zInducedSizeOffset);

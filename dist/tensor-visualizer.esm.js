@@ -26,6 +26,10 @@ var script = /*#__PURE__*/Vue.extend({
       type: Number,
       default: 4
     },
+    fillPercentage: {
+      type: Number,
+      default: 80
+    },
     showBoundingBox: {
       type: Boolean,
       default: false
@@ -40,7 +44,6 @@ var script = /*#__PURE__*/Vue.extend({
         x: 0,
         y: 0
       },
-      maxFit: 80,
       minSize: null,
       localTensor: {
         shape: [],
@@ -54,7 +57,11 @@ var script = /*#__PURE__*/Vue.extend({
     this.localTensor = this.tensor; // generate test-data:
 
     const totalSize = this.localTensor.shape.reduce((ts, e) => e * ts);
-    this.localTensor.data = new Array(totalSize).fill(0).map(() => Math.random());
+
+    for (let i = this.localTensor.data.length; i < totalSize; i++) {
+      this.localTensor.data.push(Math.random());
+    }
+
     window.addEventListener('resize', this.setCanvasSize);
     this.initializeCanvas();
   },
@@ -123,7 +130,7 @@ var script = /*#__PURE__*/Vue.extend({
       // based on the min-sidelength of the canvas
 
       const minCanvasSize = (_this$minSize = this.minSize) !== null && _this$minSize !== void 0 ? _this$minSize : 0;
-      const tensorDrawSize = minCanvasSize / 100 * this.maxFit;
+      const tensorDrawSize = minCanvasSize / 100 * this.fillPercentage;
       const zInducedSizeOffset = (tensorSizeZ - 1) / 2;
       const maxSize = Math.max(tensorSizeY + zInducedSizeOffset, tensorSizeX + zInducedSizeOffset);
       const elementSize = Math.floor(tensorDrawSize / maxSize); // calculate offset of the z-planes
@@ -390,8 +397,8 @@ var __vue_staticRenderFns__ = [];
 
 const __vue_inject_styles__ = function (inject) {
   if (!inject) return;
-  inject("data-v-64893bde_0", {
-    source: ".visualizer-wrapper[data-v-64893bde]{width:100%;height:100%}.visualizer-wrapper canvas[data-v-64893bde]{width:100%;height:100%}",
+  inject("data-v-1f11d0b2_0", {
+    source: ".visualizer-wrapper[data-v-1f11d0b2]{width:100%;height:100%}.visualizer-wrapper canvas[data-v-1f11d0b2]{width:100%;height:100%}",
     map: undefined,
     media: undefined
   });
@@ -399,7 +406,7 @@ const __vue_inject_styles__ = function (inject) {
 /* scoped */
 
 
-const __vue_scope_id__ = "data-v-64893bde";
+const __vue_scope_id__ = "data-v-1f11d0b2";
 /* module identifier */
 
 const __vue_module_identifier__ = undefined;
