@@ -81,7 +81,7 @@ var script = /*#__PURE__*/Vue.extend({
     initializeCanvas() {
       // intialize canvas
       const canvas = this.$refs.canvas;
-      this.ctx2D = canvas?.getContext('2d');
+      this.ctx2D = canvas === null || canvas === void 0 ? void 0 : canvas.getContext('2d');
       if (!this.ctx2D || !canvas) return;
       this.contextInitialized = true;
       this.setCanvasSize();
@@ -105,18 +105,24 @@ var script = /*#__PURE__*/Vue.extend({
 
     // helper functions
     drawTensor() {
+      var _this$minSize;
+
       if (!this.ctx2D) return; // 1-3d tensors only
 
       if (this.localTensor.shape.length > 3) return; // extend shape to 3d
 
-      const shape = new Array(3).fill(0).map((_, i) => this.localTensor.shape[i] ?? 1);
+      const shape = new Array(3).fill(0).map((_, i) => {
+        var _this$localTensor$sha;
+
+        return (_this$localTensor$sha = this.localTensor.shape[i]) !== null && _this$localTensor$sha !== void 0 ? _this$localTensor$sha : 1;
+      });
       const tensorSizeX = shape[0];
       const tensorSizeY = shape[1];
       const tensorSizeZ = shape[2];
       const maxValueLength = Math.max(...this.localTensor.data.map(e => e.toFixed(1).length)); // calculate the size of the drawn tensor-plane
       // based on the min-sidelength of the canvas
 
-      const minCanvasSize = this.minSize ?? 0;
+      const minCanvasSize = (_this$minSize = this.minSize) !== null && _this$minSize !== void 0 ? _this$minSize : 0;
       const tensorDrawSize = minCanvasSize / 100 * this.maxFit;
       const zInducedSizeOffset = (tensorSizeZ - 1) / 2;
       const maxSize = Math.max(tensorSizeY + zInducedSizeOffset, tensorSizeX + zInducedSizeOffset);
