@@ -1,5 +1,5 @@
 {
-  "name": "TensorVisualizer",
+  "name": "VueTensor",
   "version": "1.0.0",
   "description": "",
   "main": "dist/tensor-visualizer.ssr.js",
